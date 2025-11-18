@@ -1,5 +1,6 @@
 # screens/menu.py
-import os, json, pygame
+import json
+import pygame
 from settings import (
     WIDTH, HEIGHT, FPS, BLANCO, RUTA_FONDO,
     RUTA_ICONO_MUSICA_ON, RUTA_ICONO_MUSICA_OFF, SAVE_PATH, TITLE
@@ -9,12 +10,16 @@ from ui import Button
 # ----------------- helpers simples -----------------
 
 def cargar_fondo():
-    if os.path.exists(RUTA_FONDO):
+    # intento cargar la imagen; si falla, uso un color plano
+    try:
         img = pygame.image.load(RUTA_FONDO).convert()
-        return pygame.transform.scale(img, (WIDTH, HEIGHT))
-    fondo = pygame.Surface((WIDTH, HEIGHT))
-    fondo.fill((25, 30, 40))
-    return fondo
+        img = pygame.transform.scale(img, (WIDTH, HEIGHT))
+        return img
+    except:
+        fondo = pygame.Surface((WIDTH, HEIGHT))
+        fondo.fill((25, 30, 40))
+        return fondo
+
 
 def cargar_iconos_musica():
     img_on = pygame.image.load(RUTA_ICONO_MUSICA_ON).convert_alpha()
@@ -22,6 +27,7 @@ def cargar_iconos_musica():
     img_on = pygame.transform.scale(img_on, (40, 40))
     img_off = pygame.transform.scale(img_off, (40, 40))
     return img_on, img_off
+
 
 def toggle_mute(sonando):
     if not pygame.mixer.get_init():
@@ -33,42 +39,36 @@ def toggle_mute(sonando):
         pygame.mixer.music.unpause()
         return True
 
+
 def cargar_save():
-    if not os.path.exists(SAVE_PATH):
-        # valores por defecto si no hay partida
-        return {"money": 0, "factories": []}
+    # intento abrir el archivo; si no existe o está roto, devuelvo dict vacío
     try:
         f = open(SAVE_PATH, "r", encoding="utf-8")
         data = json.load(f)
         f.close()
         return data
     except:
-        return {"money": 0, "factories": []}
+        return {}   # sin datos, arranca de cero
+
 
 def calcular_porcentaje(data):
-    # si no hay fábricas, 0%
-    facs = data.get("factories", [])
-    if len(facs) == 0:
-        return 0
+    fab_medias  = data.get("fabrica_medias", {})
+    fab_shorts  = data.get("fabrica_shorts", {})
+    fab_remeras = data.get("fabrica_remeras", {})
 
-    # contamos cuántas están desbloqueadas
-    desbloq = 0
-    for f in facs:
-        if f.get("unlocked", 0) == 1:
-            desbloq = desbloq + 1
+    p_medias  = fab_medias.get("porcentaje", 0)
+    p_shorts  = fab_shorts.get("porcentaje", 0)
+    p_remeras = fab_remeras.get("porcentaje", 0)
 
-    # contamos cuántas tienen nivel 40 o más
-    nivel_ok = 0
-    for f in facs:
-        if f.get("max_level", 0) >= 40:
-            nivel_ok = nivel_ok + 1
+    total_fabricas = 3
+    progreso_global = int((p_medias + p_shorts + p_remeras) / total_fabricas)
 
-    porc = 0
-    if desbloq == 3:
-        porc = porc + 50
-    if nivel_ok == 3:
-        porc = porc + 50
-    return porc
+    if progreso_global < 0:
+        progreso_global = 0
+    if progreso_global > 100:
+        progreso_global = 100
+
+    return progreso_global, p_medias, p_shorts, p_remeras
 
 # ----------------- menú principal -----------------
 
@@ -90,7 +90,7 @@ def run_menu(pantalla, reloj):
         btn_jugar = btn_datos = btn_salir = btn_mute = None
         btn_volver = None
 
-        # ----------- DIBUJAR -----------
+        # ----------- DIBUJAR ----------- 
         if estado == "menu":
             titulo = fuente_titulo.render(TITLE, True, BLANCO)
             pantalla.blit(titulo, titulo.get_rect(center=(WIDTH//2, 120)))
@@ -109,22 +109,29 @@ def run_menu(pantalla, reloj):
 
         elif estado == "datos":
             data = cargar_save()
-            porc = calcular_porcentaje(data)
-            dinero = data.get("money", 0)
+            progreso_global, p_medias, p_shorts, p_remeras = calcular_porcentaje(data)
+
+            # dinero: si no tenemos "money" clásico, intento leerlo de fabrica_medias
+            dinero = data.get("money", None)
+            if dinero is None:
+                fab_medias = data.get("fabrica_medias", {})
+                dinero = fab_medias.get("dinero", 0)
 
             titulo = fuente_titulo.render("Datos de partida", True, BLANCO)
             pantalla.blit(titulo, titulo.get_rect(center=(WIDTH//2, 100)))
 
-            txt1 = fuente_btn.render("Progreso: " + str(porc) + "%", True, BLANCO)
+            txt1 = fuente_btn.render("Progreso: " + str(progreso_global) + "%", True, BLANCO)
             txt2 = fuente_btn.render("Dinero: $" + str(dinero), True, BLANCO)
             pantalla.blit(txt1, (WIDTH//2-220, HEIGHT//2-60))
             pantalla.blit(txt2, (WIDTH//2-220, HEIGHT//2))
 
             y = HEIGHT//2 + 80
-            for f in data.get("factories", []):
-                nombre = f.get("name", "fabrica")
-                desbloq = "SI" if f.get("unlocked", 0) == 1 else "NO"
-                linea = nombre + " desbloqueada: " + desbloq
+            lineas = [
+                "Fábrica de Medias: " + str(p_medias) + "%",
+                "Fábrica de Shorts: " + str(p_shorts) + "%",
+                "Fábrica de Remeras: " + str(p_remeras) + "%",
+            ]
+            for linea in lineas:
                 txt = fuente_sm.render(linea, True, BLANCO)
                 pantalla.blit(txt, (WIDTH//2-220, y))
                 y = y + 30
@@ -134,25 +141,19 @@ def run_menu(pantalla, reloj):
 
         pygame.display.flip()
 
-        # ----------- EVENTOS -----------
+        # ----------- EVENTOS ----------- 
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 return ("salir", None)
-
             if estado == "menu":
                 if btn_mute and btn_mute.clicked(e):
                     sonando = toggle_mute(sonando)
-
                 if btn_jugar and btn_jugar.clicked(e):
-                    # acá no hacemos nada más, dejamos que main cargue el save
                     return ("jugar", None)
-
                 if btn_datos and btn_datos.clicked(e):
                     estado = "datos"
-
                 if btn_salir and btn_salir.clicked(e):
                     return ("salir", None)
-
             elif estado == "datos":
                 if btn_volver and btn_volver.clicked(e):
                     estado = "menu"

@@ -1,3 +1,30 @@
 {
-  "nombre": "WRY"
+    "nombre": "Jugador",
+    "fabrica_medias": {
+        "dinero": 1860173,
+        "medias": 1,
+        "cajas": 1,
+        "encargado_tejedor": true,
+        "encargado_terminado": true,
+        "encargado_vendedor": true,
+        "tejedor": {
+            "level": 40,
+            "costo_mejora": 605,
+            "costo_encargado": 150
+        },
+        "terminado": {
+            "level": 40,
+            "costo_mejora": 727,
+            "costo_encargado": 180
+        },
+        "vendedor": {
+            "level": 40,
+            "costo_mejora": 810,
+            "costo_encargado": 220,
+            "precio_venta": 127
+        },
+        "porcentaje": 100
+    },
+    "fabrica_shorts": {},
+    "fabrica_remeras": {}
 }

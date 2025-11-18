@@ -37,6 +37,3 @@ SAVE_PATH = os.path.join(BASE_DIR, "save.json")
 # fondo del juego e icono de salir
 RUTA_FONDO_JUEGO = os.path.join(IMAGES_DIR, "fondojuego.png")
 RUTA_ICONO_EXIT  = os.path.join(IMAGES_DIR, "exit.png")
-
-
-
