@@ -1,0 +1,14 @@
+Informe de Inventario de Equipos
+========================================
+ID: 1, Nombre: equipoprueba2, Categoria: pc, Estado: usado, Valor: $5000.00
+ID: 2, Nombre: equipo6, Categoria: impresora, Estado: nuevo, Valor: $60000.00
+[34mID: 1, Nombre: equipo2, Categoria: pc, Estado: usado, Valor: $4000.00[0m
+[34mID: 2, Nombre: equipo3, Categoria: notebook, Estado: usado, Valor: $6000.00[0m
+[34mID: 3, Nombre: equipo4, Categoria: pc, Estado: nuevo, Valor: $5.00[0m
+
+Total de equipos: 2
+Valor total del inventario: $65000.00
+Valor promedio por equipo: $32500.00
+Total de equipos: 3
+Valor total del inventario: $10005.00
+Valor promedio por equipo: $3335.00
