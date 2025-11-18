@@ -1,4 +1,3 @@
-# screens/game.py
 # Pantalla principal del juego de la fábrica de medias
 
 import pygame
@@ -21,17 +20,20 @@ from screens.vendedor import (
     cargar_estado_vendedor, guardar_estado_vendedor,
 )
 
-IMAGES_DIR = "mi_juego/assets/images/"
+
+IMAGES_DIR = "assets/images/"
+
 
 
 # ----------------- funciones comunes -----------------
 def cargar_imagen(nombre, size=None):
     """Carga una imagen desde la carpeta de assets."""
-    ruta = IMAGES_DIR + nombre
+    ruta = IMAGES_DIR + nombre 
     img = pygame.image.load(ruta).convert_alpha()
     if size:
         img = pygame.transform.scale(img, size)
     return img
+
 
 
 def cargar_fondo():

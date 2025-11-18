@@ -5,7 +5,7 @@ import pygame
 from settings import FPS, VELOCIDAD_BASE
 from screens import economia
 
-IMAGES_DIR = "mi_juego/assets/images/"
+IMAGES_DIR = "assets/images/"
 
 
 # ----------------- POSICIONES TEJEDOR -----------------

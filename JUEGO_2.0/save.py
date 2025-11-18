@@ -1,40 +1,21 @@
 # save.py
-import json, os
+import json
 
+# El save va en la misma carpeta donde está main.py
 SAVE_PATH = "save.json"
 
-DEFAULT_DATA = {
-    "money": 0,
-    "factories": [
-        {"name": "medias",  "unlocked": 1, "max_level": 1},
-        {"name": "shorts",  "unlocked": 0, "max_level": 0},
-        {"name": "remeras", "unlocked": 0, "max_level": 0}
-    ]
-}
 
 def load_game():
-    if not os.path.exists(SAVE_PATH):
-        return DEFAULT_DATA
+    """Carga el save.json si existe, sino crea uno por defecto."""
     try:
-        f = open(SAVE_PATH, "r", encoding="utf-8")
-        data = json.load(f)
-        f.close()
-        return data
-    except:
-        return DEFAULT_DATA
-
-# save.py
-import json
-import os
-
-SAVE_PATH = "JUEGO_2.0/save.json"
-
-
-def load_game():
-    if not os.path.exists(SAVE_PATH):
+        with open(SAVE_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        # Si no existe el archivo, devolvemos el save inicial
         return crear_save_por_defecto()
-    with open(SAVE_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
+    except:
+        # Si se rompe el json o algo raro, también arrancamos de cero
+        return crear_save_por_defecto()
 
 
 def save_game(datos):

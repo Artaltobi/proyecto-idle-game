@@ -1,5 +1,6 @@
 import pygame
-from settings import WIDTH, HEIGHT
+import os
+from settings import WIDTH, HEIGHT, IMAGES_DIR
 from screens.game import run_game as run_fabrica_medias
 from save import save_game
 from ui import Button
@@ -14,16 +15,15 @@ FABRICAS = {
     3: pygame.Rect(2150, 1450, 450, 450)
 }
 
-# Iconos de UI (mute / menú) vienen de la carpeta del juego de fábrica
-IMAGES_DIR_UI = "mi_juego/assets/images/"
-# Sprites del personaje y fondo del overworld
-IMAGES_DIR_OVERWORLD = "JUEGO_2.0/assets/images/"
+# Iconos de UI y sprites usan la misma carpeta de imágenes del juego
+IMAGES_DIR_UI = IMAGES_DIR
+IMAGES_DIR_OVERWORLD = IMAGES_DIR
 
 
 # ---------- helpers ----------
 
 def cargar_imagen_ui(nombre, size=None):
-    ruta = IMAGES_DIR_UI + nombre
+    ruta = os.path.join(IMAGES_DIR_UI, nombre)
     img = pygame.image.load(ruta).convert_alpha()
     if size:
         img = pygame.transform.scale(img, size)
@@ -32,7 +32,7 @@ def cargar_imagen_ui(nombre, size=None):
 
 def cargar_sprite_overworld(nombre, scale=PLAYER_SCALE):
     """Carga y escala un sprite del overworld."""
-    ruta = IMAGES_DIR_OVERWORLD + nombre
+    ruta = os.path.join(IMAGES_DIR_OVERWORLD, nombre)
     img = pygame.image.load(ruta).convert_alpha()
     w = int(img.get_width() * scale)
     h = int(img.get_height() * scale)
@@ -64,7 +64,7 @@ class OverworldScreen:
 
         # ---------- mapa de fondo ----------
         original = pygame.image.load(
-            IMAGES_DIR_OVERWORLD + "fondo_overworld.png"
+            os.path.join(IMAGES_DIR_OVERWORLD, "fondo_overworld.png")
         ).convert()
 
         big_width = original.get_width() * MAP_SCALE
