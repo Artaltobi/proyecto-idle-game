@@ -1,5 +1,13 @@
 # proyecto-idle-game
 
+Cómo ejecutar el proyecto?
+Para que el juego funcione, siempre debe ejecutarse desde dentro de la carpeta JUEGO_2.0, porque el código usa rutas relativas como:
+      assets/images/...
+Estas rutas solo existen cuando el programa se ejecuta desde esa carpeta.
+Pasos correctos:
+      cd JUEGO_2.0
+      py main.py
+
 🧵 Idle Factory – README Completo
 🎮 ¿Qué es Idle Factory?
 
