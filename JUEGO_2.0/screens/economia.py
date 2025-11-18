@@ -1,6 +1,6 @@
 # Manejo simple de recursos para la fábrica de medias
 
-DINERO_INICIAL = 1900000
+DINERO_INICIAL = 10
 
 # Recursos de la fábrica
 dinero = DINERO_INICIAL
