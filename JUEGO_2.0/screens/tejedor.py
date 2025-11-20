@@ -1,5 +1,4 @@
-# screens/tejedor.py
-# Puesto del TEJEDOR (máquina + trabajador + encargado)
+# Archivo del puesto del TEJEDOR (máquina + trabajador + encargado)
 
 import pygame
 from settings import FPS, VELOCIDAD_BASE
@@ -9,8 +8,9 @@ IMAGES_DIR = "assets/images/"
 
 
 # ----------------- POSICIONES TEJEDOR -----------------
+# a mano para cambiar a gusto.
 def posiciones_tejedor():
-    """Devuelve un diccionario con todas las posiciones del puesto."""
+    """Devuelve todas las posiciones del puesto."""
     datos_pos = {}
 
     datos_pos["maquina"] = (200, 310)
@@ -27,7 +27,7 @@ def posiciones_tejedor():
 
 
 def _load(nombre, size=None):
-    """Carga imagen del tejedor."""
+    """Carga imagen del tejedor"""
     ruta = IMAGES_DIR + nombre
     img = pygame.image.load(ruta).convert_alpha()
     if size:
@@ -36,13 +36,13 @@ def _load(nombre, size=None):
 
 
 def _calcular_frames(level, base_segundos=VELOCIDAD_BASE):
-    """Convierte la velocidad (segundos) en cantidad de frames según el nivel."""
+    """Convierte la velocidad (segundos) en cantidad de frames segun el nivel."""
     segundos = max(0.5, base_segundos - 0.18 * (level - 1))
     return int(segundos * FPS)
 
 
 def crear_tejedor(fuente_chica):
-    """Crea y devuelve el diccionario con todos los datos del tejedor."""
+    """Crea todos los datos del tejedor"""
     pos = posiciones_tejedor()
     datos = {}
 
@@ -103,7 +103,6 @@ def crear_tejedor(fuente_chica):
     _actualizar_sprite_maquina(datos)
     return datos
 
-
 def _actualizar_sprite_maquina(datos):
     """Cambia la imagen de la máquina según el nivel."""
     lvl = datos["level"]
@@ -120,7 +119,7 @@ def _actualizar_sprite_maquina(datos):
 
 
 def _intentar_mejorar(datos):
-    """Si hay plata y no se llegó al máximo, mejora el tejedor."""
+    """Si hay plata y no se llego al máximo, mejora el tejedor."""
     if datos["level"] < datos["level_max"]:
         if economia.pagar(datos["costo_mejora"]):
             datos["level"] += 1
@@ -130,7 +129,7 @@ def _intentar_mejorar(datos):
 
 
 def _intentar_comprar_encargado(datos):
-    """Compra el encargado del tejedor si hay plata y aún no existe."""
+    """Compra el encargado del tejedor si hay plata y no existe."""
     if economia.encargado_tejedor:
         return
     if economia.pagar(datos["costo_encargado"]):
@@ -140,28 +139,28 @@ def _intentar_comprar_encargado(datos):
 def manejar_evento_tejedor(datos, evento):
     """Maneja clics y teclas sobre el tejedor."""
     if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
-        # click en máquina o trabajador → producir (si no está ya trabajando)
+        # click en maquina o trabajador = producir (si no esta ya trabajando)
         if (datos["rect_maquina"].collidepoint(evento.pos) or
             datos["rect_trabajador"].collidepoint(evento.pos)):
             if not datos["trabajando"]:
                 datos["trabajando"] = True
                 datos["frames_count"] = 0
 
-        # botón mejorar
+        # boton mejorar
         if datos["rect_mejorar"].collidepoint(evento.pos):
             _intentar_mejorar(datos)
 
-        # botón encargado
+        # boton encargado
         if datos["rect_encargado_btn"].collidepoint(evento.pos):
             _intentar_comprar_encargado(datos)
 
-    # tecla de acceso rápido
+    # tecla de acceso rapido
     if evento.type == pygame.KEYDOWN and evento.key == pygame.K_1:
         _intentar_mejorar(datos)
 
 
 def actualizar_tejedor(datos):
-    """Actualiza el estado del tejedor cada frame."""
+    """Actualiza el estado del tejedor cada frame"""
     # auto-click del encargado
     if (not datos["trabajando"]) and economia.encargado_tejedor:
         datos["trabajando"] = True
@@ -188,7 +187,7 @@ def actualizar_tejedor(datos):
 
 
 def dibujar_tejedor(pantalla, datos, cantidad_medias):
-    """Dibuja máquina, trabajador, botones y barras del tejedor."""
+    """Dibuja máquina, trabajador, botones y barras del tejedor"""
     # máquina
     pantalla.blit(datos["machine_img"], datos["pos_maquina"])
 
@@ -254,7 +253,7 @@ def dibujar_tejedor(pantalla, datos, cantidad_medias):
         pantalla.blit(txtf, (fx, fy))
 
 def cargar_estado_tejedor(datos, datos_save):
-    """Restaura nivel y costos del tejedor desde el save."""
+    """Restaura nivel y costos del tejedor desde el save"""
     datos["level"] = datos_save.get("level", 1)
     datos["costo_mejora"] = datos_save.get("costo_mejora", datos["costo_mejora"])
     datos["costo_encargado"] = datos_save.get("costo_encargado", datos["costo_encargado"])
@@ -264,7 +263,7 @@ def cargar_estado_tejedor(datos, datos_save):
 
 
 def guardar_estado_tejedor(datos):
-    """Devuelve un dict con lo importante del tejedor para guardar."""
+    """Devuelve una lista con lo importante del tejedor para guardar."""
     return {
         "level": datos["level"],
         "costo_mejora": datos["costo_mejora"],

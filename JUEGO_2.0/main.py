@@ -11,12 +11,12 @@ def main():
     pygame.display.set_caption("Idle Factory")
     reloj = pygame.time.Clock()
 
-    # ---- MÚSICA DE FONDO ----
+    # -- MUSICA DE FONDO ----
     try:
         pygame.mixer.init()
-        pygame.mixer.music.load(RUTA_MUSICA)  # usa la ruta de settings.py
-        pygame.mixer.music.set_volume(0.5)    # volumen (0.0 a 1.0)
-        pygame.mixer.music.play(-1)           # -1 = loop infinito
+        pygame.mixer.music.load(RUTA_MUSICA)
+        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.play(-1)
     except Exception as e:
         print("No se pudo cargar la música:", e)
 
@@ -30,7 +30,7 @@ def main():
 
     corriendo = True
     while corriendo:
-        # ---- MENÚ PRINCIPAL ----
+        # ---- MENU PRINCIPAL ----
         accion, _ = run_menu(pantalla, reloj)
 
         if accion == "salir":

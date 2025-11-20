@@ -1,4 +1,4 @@
-# Manejo simple de recursos para la fábrica de medias
+#modificar dinero para probar economia // avanzar en el juego.
 
 DINERO_INICIAL = 10
 
@@ -14,7 +14,7 @@ encargado_vendedor = False
 
 
 def pagar(monto):
-    """Intenta pagar un monto. Devuelve True si alcanzó la plata."""
+    """Intenta pagar un monto. Devuelve True si alcanza la plata"""
     global dinero
     if dinero >= monto:
         dinero -= monto
@@ -23,13 +23,13 @@ def pagar(monto):
 
 
 def producir_media():
-    """Suma 1 media tejida."""
+    """Suma 1 media tejida"""
     global medias
     medias += 1
 
 
 def producir_caja():
-    """Convierte 1 media en 1 caja, si hay stock."""
+    """Convierte 1 media en 1 caja, si hay stock"""
     global medias, cajas
     if medias > 0:
         medias -= 1
@@ -39,7 +39,7 @@ def producir_caja():
 
 
 def vender(monto):
-    """Vende 1 caja y suma dinero."""
+    """Vende 1 caja y suma dinero"""
     global cajas, dinero
     if cajas > 0:
         cajas -= 1
@@ -49,7 +49,7 @@ def vender(monto):
 
 
 def reset():
-    """Reinicia toda la economía de la fábrica de medias."""
+    """Reinicia toda la economia de la fábrica de medias"""
     global dinero, medias, cajas
     global encargado_tejedor, encargado_terminado, encargado_vendedor
 
@@ -62,7 +62,7 @@ def reset():
     encargado_vendedor = False
 
 def cargar_desde_save(datos_fabrica):
-    """Carga el estado económico desde un dict del save."""
+    """Carga el estado económico desde el save"""
     global dinero, medias, cajas
     global encargado_tejedor, encargado_terminado, encargado_vendedor
 
@@ -76,7 +76,7 @@ def cargar_desde_save(datos_fabrica):
 
 
 def volcar_a_save():
-    """Devuelve un dict con el estado económico actual para guardar en el save."""
+    """Devuelve un listado con el estado economico actual para guardar en el save"""
     return {
         "dinero": dinero,
         "medias": medias,

@@ -1,5 +1,4 @@
-# screens/vendedor.py
-# Puesto del VENDEDOR (convierte cajas en dinero)
+# archiv9o del Puesto del VENDEDOR (convierte cajas de terminado.py en dinero)
 
 import pygame
 from settings import FPS, VELOCIDAD_BASE
@@ -185,7 +184,7 @@ def dibujar_vendedor(pantalla, datos):
         pygame.draw.rect(pantalla, (230, 230, 230),
                         (bar_x, bar_y, datos["barra_w"], datos["barra_h"]), 2, border_radius=6)
 
-    # botón mejorar
+    # boton mejorar
     pygame.draw.rect(pantalla, (220, 220, 220), datos["rect_mejorar"], border_radius=10)
     pygame.draw.rect(pantalla, (120, 120, 120), datos["rect_mejorar"], 2, border_radius=10)
     if datos["level"] < datos["level_max"]:
@@ -196,7 +195,7 @@ def dibujar_vendedor(pantalla, datos):
     pantalla.blit(txt, txt.get_rect(center=datos["rect_mejorar"].center))
 
 
-    # botón encargado
+    # boyon encargado
     color_enc = (200, 200, 200) if not economia.encargado_vendedor else (150, 150, 150)
     pygame.draw.rect(pantalla, color_enc, datos["rect_encargado_btn"], border_radius=10)
     pygame.draw.rect(pantalla, (80, 80, 80), datos["rect_encargado_btn"], 2, border_radius=10)

@@ -59,8 +59,8 @@ class OverworldScreen:
         self.save_data = save_data
 
         self.fabrica_actual = None
-        self.morido = False      # 🔥 estado de muerte
-        self.salir_al_menu = False  # 🔙 flag para volver al menú
+        self.morido = False      #  estado de muerte
+        self.salir_al_menu = False  #  flag para volver al menú
 
         # ---------- mapa de fondo ----------
         original = pygame.image.load(
@@ -107,9 +107,9 @@ class OverworldScreen:
         self.sonando = True if pygame.mixer.get_init() else False
         # --------------------------------------------------------
 
-    # 👇 NUEVO: función para perder todo el progreso
+    # función para perder todo el progreso
     def perder_progreso(self):
-        """Resetea todo el save cuando el jugador muere."""
+        """Resetea todo el save cuando el jugador muere"""
         self.save_data.clear()
         self.save_data.update({
             "nombre": self.game.nombre_jugador,
@@ -120,10 +120,9 @@ class OverworldScreen:
         save_game(self.save_data)
 
     def entrar_a_fabrica(self):
-        """Entra al minijuego de la fábrica según la fábrica actual."""
+        """Entra al minijuego de la fábrica según la fábrica actual"""
         if not self.fabrica_actual:
             return
-
         resultado = run_fabrica_medias(
             self.game.pantalla,
             self.game.reloj,
@@ -131,10 +130,10 @@ class OverworldScreen:
             self.save_data,
         )
 
-        # Al volver de la fábrica, guardamos en disco
+        # Al volver de la fabrica, guardamos en disco
         save_game(self.save_data)
 
-        # si desde la fábrica eligió cerrar todo
+        # si desde la fabrica eligio cerrar todo
         if resultado == "salir_total":
             self.game.ejecutando = False
 
@@ -144,11 +143,11 @@ class OverworldScreen:
                 pygame.quit()
                 quit()
 
-            # si está muerto, solo escuchamos ENTER para respawn
+            # si esta muerto, no te puede mover, Enter para respawn
             if self.morido and e.type == pygame.KEYDOWN and e.key == pygame.K_RETURN:
                 self.respawn()
 
-            # clicks de mouse (botones mute / menú)
+            # clicks de mouse -- (botones mute / menu
             if not self.morido and e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
                 if self.btn_mute.clicked(e):
                     self.sonando = toggle_mute(self.sonando)
@@ -156,11 +155,11 @@ class OverworldScreen:
                     # marcar que queremos volver al menú
                     self.salir_al_menu = True
 
-        # si está muerto, no se mueve ni entra a fábricas
+        # si esta muerto, no se mueve ni entra a lasfabricas
         if self.morido:
             return
 
-        # si ya apretó el botón de menú, no seguimos procesando movimiento
+        # si ya apreto el boton de menu, no procesa movimiento
         if self.salir_al_menu:
             return
 
@@ -179,7 +178,7 @@ class OverworldScreen:
         if keys[pygame.K_d]:
             dx = PLAYER_SPEED
 
-        # luego elegimos sprite según la última dirección pulsada
+        # sprite segun la última dirección pulsada
         if keys[pygame.K_w]:
             self.player_img = self.pj_atras
         elif keys[pygame.K_s]:
@@ -189,7 +188,7 @@ class OverworldScreen:
         elif keys[pygame.K_a]:
             self.player_img = self.pj_izquierda
         else:
-            # quieto: mirando al frente
+            # quieto = mirando al frente
             self.player_img = self.pj_frente
 
         # mover jugador
@@ -206,7 +205,7 @@ class OverworldScreen:
         if self.player_y > self.map_rect.height:
             self.player_y = self.map_rect.height
 
-        # detectar muerte por agua 🔥
+        # detectar muerte por agua 
         jugador_rect_mundo = pygame.Rect(
             self.player_x - self.player_size / 2,
             self.player_y - self.player_size / 2,
@@ -215,10 +214,10 @@ class OverworldScreen:
         )
         if jugador_rect_mundo.colliderect(self.death_zone):
             self.morido = True
-            self.perder_progreso()   # 👈 acá se borra TODO el progreso
+            self.perder_progreso()   # acá se borra el progreso, dinero, todo
             return
 
-        # detectar fábrica cercana
+        # detectar fabrica cercana
         self.fabrica_actual = None
         for fid, rect in FABRICAS.items():
             if self.jugador_cerca(rect):
@@ -232,20 +231,16 @@ class OverworldScreen:
     def get_camera_offset(self):
         offset_x = int(self.player_x - WIDTH / 2)
         offset_y = int(self.player_y - HEIGHT / 2)
-
         if offset_x < 0:
             offset_x = 0
         if offset_y < 0:
             offset_y = 0
-
         max_offset_x = self.map_rect.width - WIDTH
         max_offset_y = self.map_rect.height - HEIGHT
-
         if offset_x > max_offset_x:
             offset_x = max_offset_x
         if offset_y > max_offset_y:
             offset_y = max_offset_y
-
         return offset_x, offset_y
 
     def draw(self, surface):
@@ -253,14 +248,14 @@ class OverworldScreen:
 
         surface.blit(self.map_surface, (-offset_x, -offset_y))
 
-        # ---------- dibujar jugador con sprite ----------
+        #  dibujar jugador con sprite 
         center_x = int(self.player_x - offset_x)
         center_y = int(self.player_y - offset_y)
         sprite_rect = self.player_img.get_rect(center=(center_x, center_y))
         surface.blit(self.player_img, sprite_rect)
         # ------------------------------------------------
 
-        # dibujar fábricas (rectángulos de referencia)
+        # dibujar fabricas (rectangulos de referencia)
         for fid, rect in FABRICAS.items():
             pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(
                 rect.x - offset_x,
@@ -269,7 +264,7 @@ class OverworldScreen:
                 rect.height
             ), 2)
 
-        # dibujar zona de muerte (debug, podés borrar esto después)
+        # dibujar zona de muerte
         pygame.draw.rect(surface, (0, 0, 255), pygame.Rect(
             self.death_zone.x - offset_x,
             self.death_zone.y - offset_y,
@@ -277,12 +272,12 @@ class OverworldScreen:
             self.death_zone.height
         ), 2)
 
-        # texto si estás cerca de una fábrica
+        # texto si estas cerca de una fábrica
         if self.fabrica_actual and not self.morido:
             txt = self.font.render("Presiona E para entrar", True, (255, 255, 255))
             surface.blit(txt, (WIDTH // 2 - 150, HEIGHT - 80))
 
-        # botones de interfaz (menu + mute)
+        # botones de interfaz-  menu + mute
         surface.blit(self.icon_menu, self.icon_menu.get_rect(center=self.btn_menu.rect.center))
         icono_actual = self.icon_on if self.sonando else self.icon_off
         surface.blit(icono_actual, icono_actual.get_rect(center=self.btn_mute.rect.center))

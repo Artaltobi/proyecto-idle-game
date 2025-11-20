@@ -7,8 +7,6 @@ from settings import (
 )
 from ui import Button
 
-# ----------------- helpers simples -----------------
-
 def cargar_fondo():
     # intento cargar la imagen; si falla, uso un color plano
     try:
@@ -48,7 +46,7 @@ def cargar_save():
         f.close()
         return data
     except:
-        return {}   # sin datos, arranca de cero
+        return {}
 
 
 def calcular_porcentaje(data):
@@ -70,7 +68,7 @@ def calcular_porcentaje(data):
 
     return progreso_global, p_medias, p_shorts, p_remeras
 
-# ----------------- menú principal -----------------
+# ----------------- menu principal -----------
 
 def run_menu(pantalla, reloj):
     fuente_titulo = pygame.font.SysFont(None, 72)
@@ -81,7 +79,7 @@ def run_menu(pantalla, reloj):
     icon_on, icon_off = cargar_iconos_musica()
     sonando = True if pygame.mixer.get_init() else False
 
-    estado = "menu"  # puede ser "menu" o "datos"
+    estado = "menu"
 
     while True:
         reloj.tick(FPS)
@@ -90,7 +88,7 @@ def run_menu(pantalla, reloj):
         btn_jugar = btn_datos = btn_salir = btn_mute = None
         btn_volver = None
 
-        # ----------- DIBUJAR ----------- 
+        # -------- DIBUJAR ------------------ 
         if estado == "menu":
             titulo = fuente_titulo.render(TITLE, True, BLANCO)
             pantalla.blit(titulo, titulo.get_rect(center=(WIDTH//2, 120)))
@@ -111,7 +109,7 @@ def run_menu(pantalla, reloj):
             data = cargar_save()
             progreso_global, p_medias, p_shorts, p_remeras = calcular_porcentaje(data)
 
-            # dinero: si no tenemos "money" clásico, intento leerlo de fabrica_medias
+            # dinero: si no tenemos "money" intento leerlo de fabrica_medias
             dinero = data.get("money", None)
             if dinero is None:
                 fab_medias = data.get("fabrica_medias", {})
@@ -141,7 +139,7 @@ def run_menu(pantalla, reloj):
 
         pygame.display.flip()
 
-        # ----------- EVENTOS ----------- 
+        # -- EVENTOS ----------------------
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 return ("salir", None)

@@ -1,29 +1,29 @@
 {
     "nombre": "Jugador",
     "fabrica_medias": {
-        "dinero": 1859741,
-        "medias": 12,
-        "cajas": 14,
-        "encargado_tejedor": true,
-        "encargado_terminado": true,
-        "encargado_vendedor": true,
+        "dinero": 10,
+        "medias": 0,
+        "cajas": 0,
+        "encargado_tejedor": false,
+        "encargado_terminado": false,
+        "encargado_vendedor": false,
         "tejedor": {
-            "level": 40,
-            "costo_mejora": 605,
+            "level": 1,
+            "costo_mejora": 20,
             "costo_encargado": 150
         },
         "terminado": {
-            "level": 40,
-            "costo_mejora": 727,
+            "level": 1,
+            "costo_mejora": 25,
             "costo_encargado": 180
         },
         "vendedor": {
-            "level": 40,
-            "costo_mejora": 810,
+            "level": 1,
+            "costo_mejora": 30,
             "costo_encargado": 220,
-            "precio_venta": 127
+            "precio_venta": 10
         },
-        "porcentaje": 100
+        "porcentaje": 2
     },
     "fabrica_shorts": {},
     "fabrica_remeras": {}

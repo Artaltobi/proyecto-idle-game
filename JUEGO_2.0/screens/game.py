@@ -27,7 +27,7 @@ IMAGES_DIR = "assets/images/"
 
 # ----------------- funciones comunes -----------------
 def cargar_imagen(nombre, size=None):
-    """Carga una imagen desde la carpeta de assets."""
+    """Carga una imagen desde la carpeta de assets"""
     ruta = IMAGES_DIR + nombre 
     img = pygame.image.load(ruta).convert_alpha()
     if size:
@@ -37,7 +37,7 @@ def cargar_imagen(nombre, size=None):
 
 
 def cargar_fondo():
-    """Carga el fondo del juego. Si falla, usa un color sólido."""
+    """Carga el fondo del juego. Si falla, usa un color sólido"""
     try:
         img = pygame.image.load(RUTA_FONDO_JUEGO).convert()
         img = pygame.transform.scale(img, (WIDTH, HEIGHT))
@@ -52,7 +52,6 @@ def toggle_mute(sonando):
     """Pausa o reanuda la música."""
     if not pygame.mixer.get_init():
         return sonando
-
     if sonando:
         pygame.mixer.music.pause()
         return False
@@ -66,50 +65,43 @@ def dibujar_barra_dinero(pantalla, fuente_titulo, fuente_valor, icono_moneda, di
     ancho, alto = 240, 52
     x = (pantalla.get_width() - ancho) // 2
     y = 10
-
     # fondo
     pygame.draw.rect(pantalla, (35, 80, 130), (x, y, ancho, alto), border_radius=14)
     # borde
     pygame.draw.rect(pantalla, (230, 230, 230), (x, y, ancho, alto), 2, border_radius=14)
-
     # icono
     pantalla.blit(icono_moneda, (x + 10, y + 8))
-
     # texto CASH
     txt_cash = fuente_titulo.render("CASH", True, (255, 255, 0))
     pantalla.blit(txt_cash, (x + 60, y + 5))
-
     # valor $
     txt_valor = fuente_valor.render(str(dinero_actual), True, (255, 255, 255))
     pantalla.blit(txt_valor, (x + 60, y + 22))
+    
 # -----------------------------------------------------
 
 
 def run_game(pantalla, reloj, nombre_jugador, save_data):
-    """Bucle principal de la fábrica de medias.
-    Devuelve:
-        - 'volver_menu' para salir al menú
-        - 'salir_total' para cerrar el juego completo
-    """
+    """Bucle principal de la fábrica de medias"""
     # fondo e íconos
     fondo = cargar_fondo()
     icon_on = cargar_imagen("music_on.png", (40, 40))
     icon_off = cargar_imagen("music_off.png", (40, 40))
     icon_exit = cargar_imagen("exit.png", (40, 40))
     icon_coin = cargar_imagen("coin.png", (36, 36))
-
     # fuentes
     fuente_titulo = pygame.font.SysFont(None, 32)
     fuente_chica = pygame.font.SysFont(None, 24)
 
+
     # ---------- CARGAR PROGRESO DESDE save_data ----------
     datos_fabrica = save_data.get("fabrica_medias", {})
 
-    # economía global de la fábrica
+    # economia global de la fábrica
     if hasattr(economia, "cargar_desde_save"):
         economia.cargar_desde_save(datos_fabrica)
 
-    # crear puestos
+    # crear puestos/ mesas
     tejedor = crear_tejedor(fuente_chica)
     terminado = crear_terminado(fuente_chica)
     vendedor = crear_vendedor(fuente_chica)
@@ -126,15 +118,12 @@ def run_game(pantalla, reloj, nombre_jugador, save_data):
     # botones de interfaz (mute y salir)
     btn_mute = Button((WIDTH - 80, 20, 48, 48), "", fuente_chica)
     btn_exit = Button((20, 20, 48, 48), "", fuente_chica)
-
     sonando = True if pygame.mixer.get_init() else False
 
     # ---------- FUNCIÓN PARA GUARDAR PROGRESO ----------
     def calcular_porcentaje_fabrica_medias(tej_data, term_data, vend_data):
         """Calcula porcentaje de progreso de esta fábrica.
-        Ejemplo simple: promedio de niveles de las 3 máquinas.
-        Si las 3 están en level_max (40), da 100%.
-        """
+        (promedio de niveles de las 3 máquinas.)"""
         max_lvl = 40 * 3  # 3 máquinas * 40 niveles
         suma_lvls = tej_data["level"] + term_data["level"] + vend_data["level"]
         pct = int((suma_lvls / max_lvl) * 100)
@@ -148,19 +137,15 @@ def run_game(pantalla, reloj, nombre_jugador, save_data):
         # Nos aseguramos de que exista la clave
         if "fabrica_medias" not in save_data:
             save_data["fabrica_medias"] = {}
-
         fab = save_data["fabrica_medias"]
-
         # economía (dinero, medias, cajas, encargados)
         if hasattr(economia, "volcar_a_save"):
             fab.update(economia.volcar_a_save())
-
         # estado de cada puesto
         fab["tejedor"] = guardar_estado_tejedor(tejedor)
         fab["terminado"] = guardar_estado_terminado(terminado)
         fab["vendedor"] = guardar_estado_vendedor(vendedor)
-
-        # 🔥 porcentaje de progreso de ESTA fábrica
+        # porcentaje de progreso de ESTA fábrica
         fab["porcentaje"] = calcular_porcentaje_fabrica_medias(
             fab["tejedor"], fab["terminado"], fab["vendedor"]
         )
@@ -188,12 +173,12 @@ def run_game(pantalla, reloj, nombre_jugador, save_data):
                 guardar_progreso()
                 return "volver_menu"
 
-        # --------- actualizar lógica ---------
+        # ----- actualiza la logica ----
         actualizar_tejedor(tejedor)
         actualizar_terminado(terminado)
         actualizar_vendedor(vendedor)
 
-        # --------- dibujar ---------
+        # ------ dibujar ---------
         pantalla.blit(fondo, (0, 0))
 
         # barra de dinero
