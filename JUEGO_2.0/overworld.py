@@ -19,9 +19,6 @@ FABRICAS = {
 IMAGES_DIR_UI = IMAGES_DIR
 IMAGES_DIR_OVERWORLD = IMAGES_DIR
 
-
-# ---------- helpers ----------
-
 def cargar_imagen_ui(nombre, size=None):
     ruta = os.path.join(IMAGES_DIR_UI, nombre)
     img = pygame.image.load(ruta).convert_alpha()
@@ -60,9 +57,9 @@ class OverworldScreen:
 
         self.fabrica_actual = None
         self.morido = False      #  estado de muerte
-        self.salir_al_menu = False  #  flag para volver al menú
+        self.salir_al_menu = False  #  flag para volver al menu
 
-        # ---------- mapa de fondo ----------
+        # mapa de fondo 
         original = pygame.image.load(
             os.path.join(IMAGES_DIR_OVERWORLD, "fondo_overworld.png")
         ).convert()
@@ -72,7 +69,7 @@ class OverworldScreen:
         self.map_surface = pygame.transform.scale(original, (big_width, big_height))
         self.map_rect = self.map_surface.get_rect()
 
-        # ---------- jugador ----------
+        # jugador ------------
         # sprites escalados
         self.pj_frente = cargar_sprite_overworld("pj_frente.png")
         self.pj_derecha = cargar_sprite_overworld("pj_derecha.png")

@@ -1,4 +1,3 @@
-# settings.py
 # constantes y rutas de recursos
 
 import os   

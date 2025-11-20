@@ -1,6 +1,3 @@
-# ui.py
-# helpers de UI simples: Button y TextInput (con cursor parpadeando)
-
 import pygame
 from settings import GRIS_OSCURO
 
@@ -14,7 +11,6 @@ class Button:
         self.color_base = color_base
         self.color_hover = color_hover
         self.color_texto = color_texto
-
     def draw(self, surface):
         color = self.color_hover if self.is_hover() else self.color_base
         pygame.draw.rect(surface, color, self.rect, border_radius=22)
@@ -22,10 +18,8 @@ class Button:
         if self.texto:
             img = self.fuente.render(self.texto, True, self.color_texto)
             surface.blit(img, img.get_rect(center=self.rect.center))
-
     def is_hover(self):
         return self.rect.collidepoint(pygame.mouse.get_pos())
-
     def clicked(self, event):
         return event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and self.is_hover()
 
@@ -37,11 +31,8 @@ class TextInput:
         self.fuente = fuente
         self.max_len = max_len
         self.placeholder = placeholder
-
         self.texto = ""
-        self.activo = False
-
-        
+        self.activo = False        
         self.cursor_visible = True
         self.cursor_timer = 0
         self.cursor_interval = 450 

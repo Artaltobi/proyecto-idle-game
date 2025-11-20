@@ -1,12 +1,9 @@
-# save.py
 import json
 
-# El save va en la misma carpeta donde está main.py
 SAVE_PATH = "save.json"
 
-
 def load_game():
-    """Carga el save.json si existe, sino crea uno por defecto."""
+    """Carga el save.json si existe, sino crea uno por defecto"""
     try:
         with open(SAVE_PATH, "r", encoding="utf-8") as f:
             return json.load(f)
@@ -19,10 +16,9 @@ def load_game():
 
 
 def save_game(datos):
-    """Guarda el diccionario 'datos' en save.json."""
+    """Guarda el diccionario 'datos' en save.json"""
     with open(SAVE_PATH, "w", encoding="utf-8") as f:
         json.dump(datos, f, indent=4, ensure_ascii=False)
-
 
 def crear_save_por_defecto():
     """Save inicial si no existe archivo."""
